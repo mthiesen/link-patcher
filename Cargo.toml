@@ -1,0 +1,26 @@
+[package]
+name = "link-patcher"
+version = "1.0.0"
+authors = ["Malte Thiesen <malte@kamalook.de>"]
+description = "Patches the Microsoft Linker so that it produces executables without the 'Rich' header"
+build = "build.rs"
+license = "MIT"
+
+[dependencies]
+byteorder = "1.2.6"
+capstone = "0.5.0"
+common_failures = "0.1.1"
+failure = "0.1.2"
+itertools = "0.7.8"
+lazy_static = "1.0"
+rprompt = "1.0.3"
+structopt = "0.2.10"
+yansi = "0.4.0"
+
+[dev-dependencies]
+tempfile = "3"
+walkdir = "2"
+winreg = "0.5"
+
+[build-dependencies]
+walkdir = "2"
