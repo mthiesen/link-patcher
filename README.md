@@ -2,7 +2,7 @@
 
 It is a poorly kept secret that the Microsoft Linker emits an undocumented data structure between the DOS stub executable and the actual Windows executable data. This data structure contains (poorly) encrypted information about the environment in which the executable was produced. The information can be used in computer forensics to identify authors of executables.
 
-This excellent [article](http://bytepointer.com/articles/the_microsoft_rich_header.htm) article explains the so-called 'Rich' header in great detail.
+This excellent [article](http://bytepointer.com/articles/the_microsoft_rich_header.htm) explains the so-called 'Rich' header in great detail.
 
 This tool can automatically patch any version of the Microsoft Linker so that it does not produce the `Rich` header.
 
