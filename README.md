@@ -10,7 +10,7 @@ The images below compare an executable produced by an unpatched linker and one p
 
 | Before | After |
 | :-----:|:-----:|
-![before](https://raw.githubusercontent.com/mthiesen/link-patcher/documentation/images/before.png) | ![after](https://raw.githubusercontent.com/mthiesen/link-patcher/documentation/images/after.png)
+![before](https://raw.githubusercontent.com/mthiesen/link-patcher/master/images/before.png) | ![after](https://raw.githubusercontent.com/mthiesen/link-patcher/master/images/after.png)
 
 # Usage
 
@@ -32,7 +32,7 @@ ARGS:
     <input_file>
 ```
 
-![usage_example](https://raw.githubusercontent.com/mthiesen/link-patcher/documentation/images/usage_example.png)
+![usage_example](https://raw.githubusercontent.com/mthiesen/link-patcher/master/images/usage_example.png)
 
 # How does this work?
 
