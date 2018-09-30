@@ -4,7 +4,7 @@ It is a poorly kept secret that the Microsoft Linker emits an undocumented data 
 
 This excellent [article](http://bytepointer.com/articles/the_microsoft_rich_header.htm) explains the so-called 'Rich' header in great detail.
 
-This tool can automatically patch any version of the Microsoft Linker so that it does not produce the `Rich` header.
+This tool can automatically patch any version of the Microsoft Linker so that it does not produce the 'Rich' header.
 
 The images below compare an executable produced by an unpatched linker and one produced by a linker patched with this tool:
 
