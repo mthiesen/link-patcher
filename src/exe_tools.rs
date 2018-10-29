@@ -1,5 +1,6 @@
 use byteorder::{BigEndian, ByteOrder, LittleEndian, ReadBytesExt};
 use common_failures::prelude::*;
+use failure::bail;
 use std::io::{Read, Seek, SeekFrom};
 
 // -------------------------------------------------------------------------------------------------

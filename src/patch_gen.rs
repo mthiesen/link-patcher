@@ -3,8 +3,9 @@ use byteorder::{ByteOrder, LittleEndian};
 use capstone::{prelude::*, Insn};
 use common_failures::prelude::*;
 use exe_tools::Architecture;
-use failure::err_msg;
+use failure::{bail, err_msg};
 use itertools::Itertools;
+use lazy_static::lazy_static;
 use std::ops::Range;
 
 // -------------------------------------------------------------------------------------------------

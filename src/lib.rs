@@ -1,10 +1,8 @@
 extern crate byteorder;
 extern crate capstone;
 extern crate common_failures;
-#[macro_use]
 extern crate failure;
 extern crate itertools;
-#[macro_use]
 extern crate lazy_static;
 #[cfg(test)]
 extern crate tempfile;
@@ -18,6 +16,7 @@ pub mod patch_gen;
 // -------------------------------------------------------------------------------------------------
 
 use common_failures::prelude::*;
+use failure::bail;
 use itertools::Itertools;
 use std::{
     ffi::OsString,
