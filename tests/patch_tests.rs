@@ -43,7 +43,8 @@ fn windows_sdk_dirs() -> impl Iterator<Item = PathBuf> {
             .filter_map(|sub_key| {
                 let sub_key = key.open_subkey(sub_key.ok()?).ok()?;
                 sub_key.get_value::<String, _>("InstallationFolder").ok()
-            }).collect::<Vec<_>>()
+            })
+            .collect::<Vec<_>>()
     });
 
     current_install_folders

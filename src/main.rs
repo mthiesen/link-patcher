@@ -34,7 +34,11 @@ fn run() -> Result<()> {
         yansi::Paint::disable();
     }
 
-    println!(concat!(env!("CARGO_PKG_NAME"), " ", env!("CARGO_PKG_VERSION")));
+    println!(concat!(
+        env!("CARGO_PKG_NAME"),
+        " ",
+        env!("CARGO_PKG_VERSION")
+    ));
     println!(env!("CARGO_PKG_AUTHORS"));
     println!();
 

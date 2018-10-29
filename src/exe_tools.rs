@@ -356,7 +356,8 @@ pub fn read_rich_header<R: Read + Seek>(mut reader: R) -> Result<Option<RichHead
             .map(|bytes| RichHeaderEntry {
                 tool_version: LittleEndian::read_u32(&bytes[0..]) ^ key,
                 use_count: LittleEndian::read_u32(&bytes[4..]) ^ key
-            }).collect()
+            })
+            .collect()
     )))
 }
 

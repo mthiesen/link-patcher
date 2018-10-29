@@ -34,7 +34,8 @@ fn main() {
             } else {
                 None
             }
-        }).map(|path| {
+        })
+        .map(|path| {
             let test_name_suffix: String = {
                 let exe_directory = path.iter().rev().skip(1).next().unwrap();
                 exe_directory
@@ -56,6 +57,7 @@ fn main() {
             "#[test] fn patched_{}() {{ test_patched_link(r\"{}\"); }}",
             link_executable.test_name_suffix,
             link_executable.path.display()
-        ).unwrap();
+        )
+        .unwrap();
     }
 }

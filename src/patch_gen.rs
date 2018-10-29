@@ -230,11 +230,9 @@ mod test_gen_disassemble_ranges {
         assert_eq!(LOOK_BACK_BUFFER, result.len());
         assert_eq!(500 - LOOK_BACK_BUFFER, result[0].start);
         assert_eq!(499, result.last().unwrap().start);
-        assert!(
-            result
-                .iter()
-                .all(|Range { end, .. }| *end == 600 + LOOK_AHEAD_BUFFER)
-        );
+        assert!(result
+            .iter()
+            .all(|Range { end, .. }| *end == 600 + LOOK_AHEAD_BUFFER));
     }
 
     #[test]
@@ -345,12 +343,14 @@ pub(crate) fn find_patch(
                     } else {
                         None
                     }
-                }).peekable();
+                })
+                .peekable();
 
             let instructions: Vec<_> = filtered_instructions
                 .peeking_take_while(|&(_, instruction_type)| {
                     instruction_type != InstructionType::Ret
-                }).collect();
+                })
+                .collect();
 
             // The next instruction must be the "ret" that stopped the peeking_take_while.
             // Otherwise the instruction sequence did not end with a "ret" and therefore must be
