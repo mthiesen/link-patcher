@@ -1,15 +1,3 @@
-extern crate byteorder;
-extern crate capstone;
-extern crate common_failures;
-extern crate failure;
-extern crate itertools;
-extern crate lazy_static;
-#[cfg(test)]
-extern crate tempfile;
-extern crate yansi;
-
-// -------------------------------------------------------------------------------------------------
-
 pub mod exe_tools;
 pub mod patch_gen;
 

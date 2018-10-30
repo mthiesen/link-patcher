@@ -1,14 +1,7 @@
-extern crate common_failures;
-extern crate link_patcher;
-extern crate rprompt;
-extern crate structopt;
-extern crate yansi;
-
-// -------------------------------------------------------------------------------------------------
-
 use common_failures::{prelude::*, quick_main};
 use std::path::PathBuf;
 use structopt::StructOpt;
+
 // -------------------------------------------------------------------------------------------------
 
 #[derive(Debug, StructOpt)]

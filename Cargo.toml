@@ -4,6 +4,7 @@ version = "1.0.0"
 authors = ["Malte Thiesen <malte@kamalook.de>"]
 description = "Patches the Microsoft Linker so that it produces executables without the 'Rich' header"
 build = "build.rs"
+edition = "2018"
 license = "MIT"
 
 [dependencies]
