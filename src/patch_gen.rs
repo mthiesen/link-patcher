@@ -503,7 +503,7 @@ mod test_find_patch {
         instructions.extend_from_slice(RET);
 
         assert!(find_patch(Architecture::X86, 1000, instructions.as_slice()).is_err());
-        assert!(find_patch(Architecture::X86, 1000, instructions.as_slice()).is_err());
+        assert!(find_patch(Architecture::X64, 1000, instructions.as_slice()).is_err());
     }
 
     #[test]
@@ -517,7 +517,7 @@ mod test_find_patch {
         instructions.extend_from_slice(RET);
 
         assert!(find_patch(Architecture::X86, 1000, instructions.as_slice()).is_err());
-        assert!(find_patch(Architecture::X86, 1000, instructions.as_slice()).is_err());
+        assert!(find_patch(Architecture::X64, 1000, instructions.as_slice()).is_err());
     }
 
     #[test]
@@ -529,7 +529,7 @@ mod test_find_patch {
         insert_dummy_instructions(&mut instructions, 50);
 
         assert!(find_patch(Architecture::X86, 1000, instructions.as_slice()).is_err());
-        assert!(find_patch(Architecture::X86, 1000, instructions.as_slice()).is_err());
+        assert!(find_patch(Architecture::X64, 1000, instructions.as_slice()).is_err());
     }
 
     #[test]
@@ -543,6 +543,6 @@ mod test_find_patch {
         insert_dummy_instructions(&mut instructions, 40);
 
         assert!(find_patch(Architecture::X86, 1000, instructions.as_slice()).is_err());
-        assert!(find_patch(Architecture::X86, 1000, instructions.as_slice()).is_err());
+        assert!(find_patch(Architecture::X64, 1000, instructions.as_slice()).is_err());
     }
 }
