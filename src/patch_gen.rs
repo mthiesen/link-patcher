@@ -1,8 +1,8 @@
 use super::Patch;
+use crate::exe_tools::Architecture;
 use byteorder::{ByteOrder, LittleEndian};
 use capstone::{prelude::*, Insn};
 use common_failures::prelude::*;
-use crate::exe_tools::Architecture;
 use failure::{bail, err_msg};
 use itertools::Itertools;
 use lazy_static::lazy_static;
