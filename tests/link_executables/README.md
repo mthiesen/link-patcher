@@ -70,7 +70,39 @@ For example, this is the folder structure on my machine:
 │       link.exe
 │       mspdb140.dll
 │
-└───14.15.26726.0_x86_x64
+├───14.15.26726.0_x86_x64
+│       link.exe
+│       mspdb140.dll
+│
+├───14.16.27023.1_x64
+│       link.exe
+│       mspdbcore.dll
+│
+├───14.16.27023.1_x64_x86
+│       link.exe
+│       mspdbcore.dll
+│
+├───14.16.27023.1_x86
+│       link.exe
+│       mspdb140.dll
+│
+├───14.16.27023.1_x86_x64
+│       link.exe
+│       mspdb140.dll
+│
+├───14.20.27508.1_x64
+│       link.exe
+│       mspdbcore.dll
+│
+├───14.20.27508.1_x64_x86
+│       link.exe
+│       mspdbcore.dll
+│
+├───14.20.27508.1_x86
+│       link.exe
+│       mspdb140.dll
+│
+└───14.20.27508.1_x86_x64
         link.exe
         mspdb140.dll
 ```
