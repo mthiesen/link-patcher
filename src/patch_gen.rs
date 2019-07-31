@@ -20,8 +20,6 @@ const XOR_EAX_EAX: &[u8] = &[0x33, 0xC0];
 // -------------------------------------------------------------------------------------------------
 
 pub fn find_candidate_ranges<'a>(code: &'a [u8]) -> impl Iterator<Item = Range<usize>> + 'a {
-    use itertools::Itertools;
-
     code.windows(4)
         .enumerate()
         .filter(|(_, bytes)| bytes == &DANS_MAGIC_BYTES || bytes == &RICH_MAGIC_BYTES)
