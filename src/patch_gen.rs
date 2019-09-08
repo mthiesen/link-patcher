@@ -29,12 +29,12 @@ pub fn find_candidate_ranges<'a>(code: &'a [u8]) -> impl Iterator<Item = Range<u
                 if first_magic != second_magic && second_pos - first_pos <= MAX_MAGIC_DISTANCE {
                     Some(Range {
                         start: first_pos,
-                        end: second_pos + 4
+                        end: second_pos + 4,
                     })
                 } else {
                     None
                 }
-            }
+            },
         )
 }
 
@@ -64,7 +64,7 @@ mod test_find_candidate_ranges {
         let result = find_candidate_ranges(&data).collect::<Vec<_>>();
         let expected = &[Range {
             start: 100,
-            end: 188
+            end: 188,
         }];
 
         assert_eq!(expected, &result[..]);
@@ -82,7 +82,7 @@ mod test_find_candidate_ranges {
         let result = find_candidate_ranges(&data).collect::<Vec<_>>();
         let expected = &[Range {
             start: 100,
-            end: 188
+            end: 188,
         }];
 
         assert_eq!(expected, &result[..]);
@@ -105,12 +105,12 @@ mod test_find_candidate_ranges {
         let expected = &[
             Range {
                 start: 100,
-                end: 188
+                end: 188,
             },
             Range {
                 start: 184,
-                end: 992
-            }
+                end: 992,
+            },
         ];
 
         assert_eq!(expected, &result[..]);
@@ -154,7 +154,7 @@ mod test_find_candidate_ranges {
         let result = find_candidate_ranges(&data).collect::<Vec<_>>();
         let expected = &[Range {
             start: 100,
-            end: 188
+            end: 188,
         }];
 
         assert_eq!(expected, &result[..]);
@@ -172,7 +172,7 @@ mod test_find_candidate_ranges {
         let result = find_candidate_ranges(&data).collect::<Vec<_>>();
         let expected = &[Range {
             start: 100,
-            end: 188
+            end: 188,
         }];
 
         assert_eq!(expected, &result[..]);
@@ -198,11 +198,11 @@ mod test_find_candidate_ranges {
 
 fn gen_disassemble_ranges(
     code: &[u8],
-    candidate_range: Range<usize>
+    candidate_range: Range<usize>,
 ) -> impl Iterator<Item = Range<usize>> {
     let start_range = Range {
         start: candidate_range.start.saturating_sub(LOOK_BACK_BUFFER),
-        end: candidate_range.start
+        end: candidate_range.start,
     };
     use std::cmp::min;
     let end = min(candidate_range.end + LOOK_AHEAD_BUFFER, code.len());
@@ -222,7 +222,7 @@ mod test_gen_disassemble_ranges {
 
         let candidate_range = Range {
             start: 500,
-            end: 600
+            end: 600,
         };
         let result: Vec<_> = gen_disassemble_ranges(&dummy_code, candidate_range).collect();
         assert_eq!(LOOK_BACK_BUFFER, result.len());
@@ -263,7 +263,7 @@ mod test_gen_disassemble_ranges {
 
         let candidate_range = Range {
             start: 900,
-            end: 998
+            end: 998,
         };
         let result: Vec<_> = gen_disassemble_ranges(&dummy, candidate_range).collect();
         assert_eq!(LOOK_BACK_BUFFER, result.len());
@@ -279,7 +279,7 @@ enum InstructionType {
     UseRichMagic,
     ModifyEax,
     Ret,
-    Other
+    Other,
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -314,14 +314,14 @@ fn classify_instruction(instruction: &Insn) -> InstructionType {
 pub(crate) fn find_patch(
     arch: Architecture,
     code_section_offset: u64,
-    code: &[u8]
+    code: &[u8],
 ) -> Result<Patch> {
     let capstone_architecture = match arch {
         Architecture::X86 => arch::x86::ArchMode::Mode32,
-        Architecture::X64 => arch::x86::ArchMode::Mode64
+        Architecture::X64 => arch::x86::ArchMode::Mode64,
     };
 
-    let mut cs = Capstone::new()
+    let cs = Capstone::new()
         .x86()
         .mode(capstone_architecture)
         .syntax(arch::x86::ArchSyntax::Intel)
@@ -406,7 +406,7 @@ pub(crate) fn find_patch(
                         + range.start as u64
                         + instruction_to_patch.address(),
                     original_code: original_code.to_vec(),
-                    patched_code
+                    patched_code,
                 });
             }
         }
@@ -432,7 +432,7 @@ mod test_find_patch {
             &[0x85, 0xF1],
             &[0x8D, 0x0C, 0x89],
             &[0x84, 0xC0],
-            &[0x3B, 0xFA]
+            &[0x3B, 0xFA],
         ];
 
         let mut single_byte_iter = SINGLE_BYTE.iter().cycle();
@@ -475,7 +475,7 @@ mod test_find_patch {
         let expected = Patch {
             offset: 1082,
             original_code: MOV_EAX_EDI.into(),
-            patched_code: XOR_EAX_EAX.into()
+            patched_code: XOR_EAX_EAX.into(),
         };
 
         assert_eq!(

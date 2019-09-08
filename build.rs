@@ -6,7 +6,7 @@ use std::{
     env,
     fs::File,
     io::Write,
-    path::{Path, PathBuf}
+    path::{Path, PathBuf},
 };
 
 // -------------------------------------------------------------------------------------------------
@@ -14,7 +14,7 @@ use std::{
 #[derive(Debug)]
 struct LinkExecutableInfo {
     path: PathBuf,
-    test_name_suffix: String
+    test_name_suffix: String,
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ fn main() {
 
             LinkExecutableInfo {
                 path,
-                test_name_suffix
+                test_name_suffix,
             }
         });
 

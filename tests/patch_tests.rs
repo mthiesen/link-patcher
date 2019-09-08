@@ -12,7 +12,7 @@ use std::{
     ffi::{OsStr, OsString},
     fs::{self, File},
     path::{Path, PathBuf},
-    process::Command
+    process::Command,
 };
 use tempfile::TempDir;
 use walkdir::WalkDir;
@@ -24,7 +24,7 @@ fn windows_sdk_dirs() -> impl Iterator<Item = PathBuf> {
 
     const PATHS: [&str; 2] = [
         r"Software\Microsoft\Microsoft SDKs\Windows",
-        r"Software\Wow6432Node\Microsoft\Microsoft SDKs\Windows"
+        r"Software\Wow6432Node\Microsoft\Microsoft SDKs\Windows",
     ];
 
     const PREDEF_KEYS: [HKEY; 2] = [HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE];
@@ -59,7 +59,7 @@ fn windows_sdk_dirs() -> impl Iterator<Item = PathBuf> {
 #[derive(Debug)]
 struct Kernel32Libs {
     x86_lib: PathBuf,
-    x64_lib: PathBuf
+    x64_lib: PathBuf,
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ fn installed_kernel32_libs() -> Option<Kernel32Libs> {
     if x86_lib.is_some() && x64_lib.is_some() {
         Some(Kernel32Libs {
             x86_lib: x86_lib.unwrap(),
-            x64_lib: x64_lib.unwrap()
+            x64_lib: x64_lib.unwrap(),
         })
     } else {
         None
@@ -110,7 +110,7 @@ fn installed_kernel32_libs() -> Option<Kernel32Libs> {
 struct TestFiles {
     tempdir: TempDir,
     x86_exe: PathBuf,
-    x64_exe: PathBuf
+    x64_exe: PathBuf,
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -118,7 +118,7 @@ struct TestFiles {
 fn link_file(
     linker_path: impl AsRef<OsStr>,
     out_path: impl AsRef<OsStr>,
-    input_args: &[impl AsRef<OsStr>]
+    input_args: &[impl AsRef<OsStr>],
 ) {
     let mut out_arg = OsString::from("/OUT:");
     out_arg.push(&out_path);
@@ -150,8 +150,8 @@ fn link_test_files(linker_path: impl AsRef<OsStr>) -> TestFiles {
             OsStr::new("/MACHINE:X86"),
             OsStr::new(r"tests\objs\x86\add.o"),
             OsStr::new(r"tests\objs\x86\main.o"),
-            kernel32_libs.x86_lib.as_os_str()
-        ]
+            kernel32_libs.x86_lib.as_os_str(),
+        ],
     );
 
     let x64_exe = tempdir.path().join("test_x64.exe");
@@ -162,14 +162,14 @@ fn link_test_files(linker_path: impl AsRef<OsStr>) -> TestFiles {
             OsStr::new("/MACHINE:X64"),
             OsStr::new(r"tests\objs\x64\add.o"),
             OsStr::new(r"tests\objs\x64\main.o"),
-            kernel32_libs.x64_lib.as_os_str()
-        ]
+            kernel32_libs.x64_lib.as_os_str(),
+        ],
     );
 
     TestFiles {
         tempdir,
         x86_exe,
-        x64_exe
+        x64_exe,
     }
 }
 
@@ -202,7 +202,7 @@ fn test_patched_link(linker_path: impl AsRef<OsStr>) {
     let patched_dir = TempDir::new().unwrap();
     copy_dir(
         Path::new(&linker_path).parent().unwrap(),
-        patched_dir.path()
+        patched_dir.path(),
     );
 
     let linker_file_name = Path::new(&linker_path).file_name().unwrap();

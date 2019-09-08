@@ -171,7 +171,7 @@ mod test_seek_to_pe_header {
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub(crate) enum Architecture {
     X86,
-    X64
+    X64,
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -190,7 +190,7 @@ pub(crate) fn determine_architecture<R: Read + Seek>(mut reader: R) -> Result<Ar
         _ => bail!(
             "Unknown machine signature in PE header: {:04x}",
             machine_signature
-        )
+        ),
     })
 }
 
@@ -294,7 +294,7 @@ mod determine_architecture_tests {
 #[derive(Debug, PartialEq)]
 pub struct RichHeaderEntry {
     pub tool_version: u32,
-    pub use_count: u32
+    pub use_count: u32,
 }
 
 #[derive(Debug, PartialEq)]
@@ -328,7 +328,7 @@ pub fn read_rich_header<R: Read + Seek>(mut reader: R) -> Result<Option<RichHead
             (key, header)
         }) {
         None => return Ok(None),
-        Some(x) => x
+        Some(x) => x,
     };
 
     // Find start of header.
@@ -338,7 +338,7 @@ pub fn read_rich_header<R: Read + Seek>(mut reader: R) -> Result<Option<RichHead
         .map(|position| &header[position + 4..])
     {
         None => bail!("Failed to find start of Rich Header."),
-        Some(x) => x
+        Some(x) => x,
     };
 
     // Skip padding.
@@ -355,9 +355,9 @@ pub fn read_rich_header<R: Read + Seek>(mut reader: R) -> Result<Option<RichHead
             .chunks(8)
             .map(|bytes| RichHeaderEntry {
                 tool_version: LittleEndian::read_u32(&bytes[0..]) ^ key,
-                use_count: LittleEndian::read_u32(&bytes[4..]) ^ key
+                use_count: LittleEndian::read_u32(&bytes[4..]) ^ key,
             })
-            .collect()
+            .collect(),
     )))
 }
 
@@ -452,43 +452,43 @@ mod test_read_rich_header {
         let expected = RichHeader(vec![
             RichHeaderEntry {
                 tool_version: 0x1046273,
-                use_count: 0xa
+                use_count: 0xa,
             },
             RichHeaderEntry {
                 tool_version: 0x1036273,
-                use_count: 0x5
+                use_count: 0x5,
             },
             RichHeaderEntry {
                 tool_version: 0x1056273,
-                use_count: 0x7f
+                use_count: 0x7f,
             },
             RichHeaderEntry {
                 tool_version: 0x10362d9,
-                use_count: 0x9
+                use_count: 0x9,
             },
             RichHeaderEntry {
                 tool_version: 0x10562d9,
-                use_count: 0x23
+                use_count: 0x23,
             },
             RichHeaderEntry {
                 tool_version: 0x10462d9,
-                use_count: 0x12
+                use_count: 0x12,
             },
             RichHeaderEntry {
                 tool_version: 0x1016273,
-                use_count: 0xb
+                use_count: 0xb,
             },
             RichHeaderEntry {
                 tool_version: 0x10000,
-                use_count: 0x98
+                use_count: 0x98,
             },
             RichHeaderEntry {
                 tool_version: 0x0,
-                use_count: 0x14
+                use_count: 0x14,
             },
             RichHeaderEntry {
                 tool_version: 0x10263cb,
-                use_count: 0x1
+                use_count: 0x1,
             },
         ]);
 
@@ -504,7 +504,7 @@ mod test_read_rich_header {
 #[derive(Debug, PartialEq)]
 pub(crate) struct CodeSection {
     pub offset: u64,
-    pub len: usize
+    pub len: usize,
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -548,7 +548,7 @@ pub(crate) fn find_code_section<R: Read + Seek>(mut reader: R) -> Result<CodeSec
         if is_code_section {
             return Ok(CodeSection {
                 offset: u64::from(LittleEndian::read_u32(&buffer[20..])),
-                len
+                len,
             });
         }
     }
@@ -613,7 +613,7 @@ mod find_code_section_tests {
 
         const EXPECTED: CodeSection = CodeSection {
             offset: 1024,
-            len: 3584
+            len: 3584,
         };
 
         let result = find_code_section(Cursor::new(DATA));

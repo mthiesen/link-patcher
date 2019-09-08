@@ -13,7 +13,7 @@ struct Options {
         long = "apply_patch",
         help = "Applies the patch to the executable after a manual confirmation. A back-up of the original file is created."
     )]
-    apply_patch: bool
+    apply_patch: bool,
 }
 
 // -------------------------------------------------------------------------------------------------

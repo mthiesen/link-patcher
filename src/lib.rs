@@ -11,7 +11,7 @@ use std::{
     fmt,
     fs::{self, File, OpenOptions},
     io::{prelude::*, SeekFrom},
-    path::{Path, PathBuf}
+    path::{Path, PathBuf},
 };
 
 // -------------------------------------------------------------------------------------------------
@@ -127,7 +127,7 @@ mod test_create_backup_file {
 struct Patch {
     offset: u64,
     original_code: Vec<u8>,
-    patched_code: Vec<u8>
+    patched_code: Vec<u8>,
 }
 
 impl Patch {
@@ -185,7 +185,7 @@ mod test_patch {
         let patch = Patch {
             offset: 4,
             original_code: vec![4, 5, 6, 7],
-            patched_code: vec![10, 11, 12, 13]
+            patched_code: vec![10, 11, 12, 13],
         };
 
         patch.apply(Cursor::new(&mut data)).unwrap();
@@ -199,7 +199,7 @@ mod test_patch {
         let patch = Patch {
             offset: 4,
             original_code: vec![4, 5, 6, 7],
-            patched_code: vec![10, 11, 12, 13]
+            patched_code: vec![10, 11, 12, 13],
         };
 
         assert!(patch.apply(Cursor::new(&mut data)).is_err());
@@ -211,7 +211,7 @@ mod test_patch {
         let patch = Patch {
             offset: 4,
             original_code: vec![4, 5, 6, 7],
-            patched_code: vec![10, 11, 12, 13]
+            patched_code: vec![10, 11, 12, 13],
         };
 
         assert!(patch.apply(Cursor::new(&mut data)).is_err());
@@ -247,7 +247,7 @@ fn find_patch(mut reader: impl Read + Seek) -> Result<Patch> {
 pub fn run(
     input_file: impl AsRef<Path>,
     apply_patch: bool,
-    confirm_apply_patch: impl FnOnce() -> Result<bool>
+    confirm_apply_patch: impl FnOnce() -> Result<bool>,
 ) -> Result<Option<PathBuf>> {
     let patch = {
         let file = File::open(&input_file)
@@ -262,7 +262,7 @@ pub fn run(
         "WARNING:",
         "You apply this patch at your own risk!",
         "The patched executable may exhibit unintended behavior!",
-        "The author of this program accepts no responsibility for any damages!"
+        "The author of this program accepts no responsibility for any damages!",
     ];
 
     for msg in WARNING_MESSAGES.iter() {
