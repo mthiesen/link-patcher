@@ -42,6 +42,7 @@ fn main() {
                     .to_string_lossy()
                     .chars()
                     .map(|c| if c.is_alphanumeric() { c } else { '_' })
+                    .flat_map(|c| c.to_lowercase())
                     .collect()
             };
 
