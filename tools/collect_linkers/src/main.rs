@@ -205,8 +205,8 @@ fn determine_path_type(path: &Path) -> PathType {
     PathType::Unknown
 }
 
-fn find_pdb_dlls(path_type: &PathType, path: impl AsRef<Path>) -> Fallible<Vec<PathBuf>> {
-    let find_pdb_dlls_in_dir = |dir: &Path| -> Fallible<Vec<PathBuf>> {
+fn find_dlls(path_type: &PathType, path: impl AsRef<Path>) -> Fallible<Vec<PathBuf>> {
+    let find_dlls_in_dir = |dir: &Path| -> Fallible<Vec<PathBuf>> {
         let inner = |dir: &Path| -> Fallible<Vec<PathBuf>> {
             let mut found_dlls = Vec::new();
 
@@ -228,7 +228,8 @@ fn find_pdb_dlls(path_type: &PathType, path: impl AsRef<Path>) -> Fallible<Vec<P
                 }
 
                 let is_mspdb = file_name.len() > 5 && file_name[..5].eq_ignore_ascii_case("mspdb");
-                if is_mspdb {
+                let is_tbbmalloc = file_name.eq_ignore_ascii_case("tbbmalloc.dll");
+                if is_mspdb || is_tbbmalloc {
                     found_dlls.push(path.to_owned());
                 }
             }
@@ -244,7 +245,7 @@ fn find_pdb_dlls(path_type: &PathType, path: impl AsRef<Path>) -> Fallible<Vec<P
         .parent()
         .expect("executable path has to have a parent directory");
 
-    let mut found_dlls = find_pdb_dlls_in_dir(&parent_dir)?;
+    let mut found_dlls = find_dlls_in_dir(&parent_dir)?;
 
     if found_dlls.is_empty() {
         match path_type {
@@ -256,24 +257,24 @@ fn find_pdb_dlls(path_type: &PathType, path: impl AsRef<Path>) -> Fallible<Vec<P
                 );
                 let mut search_dir = parent_parent_dir.to_owned();
                 search_dir.push(if *target_arch == "x86" { "x64" } else { "x86" });
-                found_dlls = find_pdb_dlls_in_dir(&search_dir)?;
+                found_dlls = find_dlls_in_dir(&search_dir)?;
             }
             PathType::HostTargetSingle(dir) => {
                 if let Some(parent_parent_dir) = parent_dir.parent() {
                     if dir.len() > 4 && dir[..4].eq_ignore_ascii_case("x86_") {
-                        found_dlls = find_pdb_dlls_in_dir(&parent_parent_dir)?;
+                        found_dlls = find_dlls_in_dir(&parent_parent_dir)?;
 
                         if found_dlls.is_empty() {
                             let mut search_dir = parent_dir.to_owned();
                             search_dir.push("../../../Common7/IDE");
                             if search_dir.is_dir() {
-                                found_dlls = find_pdb_dlls_in_dir(&search_dir)?;
+                                found_dlls = find_dlls_in_dir(&search_dir)?;
                             }
                         }
                     } else if dir.len() > 6 && dir[..6].eq_ignore_ascii_case("amd64_") {
                         let mut search_dir = parent_parent_dir.to_owned();
                         search_dir.push("amd64");
-                        found_dlls = find_pdb_dlls_in_dir(&search_dir)?;
+                        found_dlls = find_dlls_in_dir(&search_dir)?;
                     }
                 }
             }
@@ -281,7 +282,7 @@ fn find_pdb_dlls(path_type: &PathType, path: impl AsRef<Path>) -> Fallible<Vec<P
                 let mut search_dir = parent_dir.to_owned();
                 search_dir.push("../../Common7/IDE");
                 if search_dir.is_dir() {
-                    found_dlls = find_pdb_dlls_in_dir(&search_dir)?;
+                    found_dlls = find_dlls_in_dir(&search_dir)?;
                 }
             }
             PathType::Unknown => {}
@@ -397,7 +398,7 @@ struct LinkProgramInfo {
     version: String,
     architecture: Architecture,
     crc32: u32,
-    pdb_dlls: Vec<PathBuf>,
+    dlls: Vec<PathBuf>,
 }
 
 impl LinkProgramInfo {
@@ -407,7 +408,7 @@ impl LinkProgramInfo {
 
         if let Some(file_description) = version_info.file_description {
             const EXPECTED_FILE_DESCRIPTION: &str = "Microsoft® Incremental Linker";
-            if file_description != EXPECTED_FILE_DESCRIPTION {
+            if EXPECTED_FILE_DESCRIPTION != file_description {
                 bail!(
                     "file description is \"{}\", expected: \"{}\"",
                     file_description,
@@ -432,9 +433,9 @@ impl LinkProgramInfo {
         let architecture =
             get_architecture(path.as_ref()).context("failed to determine architecture")?;
 
-        let pdb_dlls = find_pdb_dlls(&path_type, &path).context("failed to find PDB DLLs")?;
-        if pdb_dlls.is_empty() {
-            bail!("failed to find any PDB DLLs");
+        let dlls = find_dlls(&path_type, &path).context("failed to find DLL dependencies")?;
+        if dlls.is_empty() {
+            bail!("failed to find any DLL dependencies");
         }
 
         let crc32 = calculate_crc32(&path).context("failed to calculate CRC32")?;
@@ -444,7 +445,7 @@ impl LinkProgramInfo {
             product_name,
             version: product_version,
             architecture,
-            pdb_dlls,
+            dlls,
             crc32,
         })
     }
@@ -517,7 +518,7 @@ fn archive_link_binaries(
     })?;
 
     let files_to_copy =
-        std::iter::once(&link_program_info.path).chain(link_program_info.pdb_dlls.iter());
+        std::iter::once(&link_program_info.path).chain(link_program_info.dlls.iter());
     for src_file in files_to_copy {
         let mut dst_file = target_directory.to_owned();
         dst_file.push(
