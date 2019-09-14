@@ -124,14 +124,14 @@ mod test_create_backup_file {
 // -------------------------------------------------------------------------------------------------
 
 #[derive(Debug, Clone, Eq, PartialEq)]
-struct Patch {
-    offset: u64,
-    original_code: Vec<u8>,
-    patched_code: Vec<u8>,
+pub struct Patch {
+    pub offset: u64,
+    pub original_code: Vec<u8>,
+    pub patched_code: Vec<u8>,
 }
 
 impl Patch {
-    fn apply(&self, mut stream: impl Read + Write + Seek) -> Result<()> {
+    pub fn apply(&self, mut stream: impl Read + Write + Seek) -> Result<()> {
         assert_eq!(self.original_code.len(), self.patched_code.len());
 
         stream.seek(SeekFrom::Start(self.offset))?;
@@ -220,7 +220,7 @@ mod test_patch {
 
 // -------------------------------------------------------------------------------------------------
 
-fn find_patch(mut reader: impl Read + Seek) -> Result<Patch> {
+pub fn find_patch(mut reader: impl Read + Seek) -> Result<Patch> {
     let arch = exe_tools::determine_architecture(&mut reader)
         .context("Failed to determine exe architecture.")?;
 
