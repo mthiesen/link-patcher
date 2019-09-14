@@ -1,5 +1,5 @@
-/.idea/
-/target/
+.idea/
+target/
 /tests/link_executables/**/*.exe
 /tests/link_executables/**/*.dll
 **/*.rs.bk
