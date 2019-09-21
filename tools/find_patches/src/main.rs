@@ -31,8 +31,20 @@ impl PatchInfo {
             string
         }
 
+        let product_name = {
+            if self.product_version.starts_with("14.22.")
+                || self.product_version.starts_with("14.20.")
+            {
+                "Visual Studio® 2019".to_owned()
+            } else {
+                self.product_name
+                    .trim_start_matches("Microsoft® ")
+                    .to_owned()
+            }
+        };
+
         let mut strings = Vec::with_capacity(7);
-        strings.push(self.product_name.trim_start_matches("Microsoft® ").to_owned());
+        strings.push(product_name);
         strings.push(self.product_version.clone());
         strings.push(match self.architecture {
             linker_utils::Architecture::X86 => "x86".to_owned(),
