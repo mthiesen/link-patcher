@@ -34,6 +34,7 @@ impl PatchInfo {
         let product_name = {
             if self.product_version.starts_with("14.22.")
                 || self.product_version.starts_with("14.20.")
+                || self.product_version.starts_with("14.23.")
             {
                 "Visual Studio® 2019".to_owned()
             } else {
