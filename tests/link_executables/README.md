@@ -1,3 +1,0 @@
-This directory should contain a copy of all linker versions that should be tested by the integration test. I cannot include them in the public repository because they are the intellectual property of Microsoft.
-
-Execute `collect_linkers.bat` to scan your system for installed Microsoft Linkers, they will be copied to this directory with all required DLLs. `build.rs` creates test cases for every linker in this directory to test that the linker is correctly patched and still works. They will be executed in subsequent invocations of `cargo test`.
