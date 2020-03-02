@@ -15,7 +15,7 @@ failure = "0.1.6"
 itertools = "0.8.2"
 lazy_static = "1.4.0"
 rprompt = "1.0.5"
-structopt = "0.3.9"
+structopt = "0.3.11"
 yansi = "0.5.0"
 
 [dev-dependencies]
