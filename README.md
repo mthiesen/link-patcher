@@ -62,6 +62,7 @@ The table below lists the found patches. I am using integration tests to verify 
 | Visual Studio® 2015  | 14.00.23506.0 | x86  | 4DB6C257 | 275951 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
 | Visual Studio® 2015  | 14.00.23506.0 | x86  | 8CE0E765 | 275951 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
 | Visual Studio® 2015  | 14.00.23506.0 | x86  | B0318E7D | 275951 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
+| Visual Studio® 2017  | 14.15.26727.0 | x86  | 8FAB3853 | 360041 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
 | Visual Studio® 2017  | 14.16.27023.1 | x64  | 4A2BBDF9 | 43507  | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio® 2017  | 14.16.27023.1 | x64  | D0C167D8 | 43507  | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio® 2017  | 14.16.27023.1 | x86  | CDCFB8B4 | 194755 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
@@ -74,6 +75,10 @@ The table below lists the found patches. I am using integration tests to verify 
 | Visual Studio® 2017  | 14.16.27035.0 | x64  | F7A7DF38 | 37975  | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio® 2017  | 14.16.27035.0 | x86  | 3681CF5D | 188401 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
 | Visual Studio® 2017  | 14.16.27035.0 | x86  | 7AD3C395 | 188401 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
+| Visual Studio® 2017  | 14.16.27038.0 | x64  | 6C49EDF1 | 37975  | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio® 2017  | 14.16.27038.0 | x64  | B346EF94 | 37975  | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio® 2017  | 14.16.27038.0 | x86  | 04D69CA2 | 188401 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
+| Visual Studio® 2017  | 14.16.27038.0 | x86  | 59D034C0 | 188401 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
 | Visual Studio® 2019  | 14.20.27508.1 | x64  | 315FE938 | 134063 | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio® 2019  | 14.20.27508.1 | x64  | 74DAEA46 | 134063 | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio® 2019  | 14.20.27508.1 | x86  | 379929A6 | 292218 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
@@ -98,3 +103,7 @@ The table below lists the found patches. I am using integration tests to verify 
 | Visual Studio® 2019  | 14.24.28316.0 | x64  | E2A84610 | 94549  | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio® 2019  | 14.24.28316.0 | x86  | 09F1F6C2 | 254912 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
 | Visual Studio® 2019  | 14.24.28316.0 | x86  | 89DF94B9 | 254912 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
+| Visual Studio® 2019  | 14.24.28319.0 | x64  | 6CAFD741 | 94549  | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio® 2019  | 14.24.28319.0 | x64  | 78D7B4B3 | 94549  | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio® 2019  | 14.24.28319.0 | x86  | 961E30F7 | 254912 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
+| Visual Studio® 2019  | 14.24.28319.0 | x86  | F76EA00B | 254912 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
