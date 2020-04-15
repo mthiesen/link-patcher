@@ -321,13 +321,16 @@ pub(crate) fn find_patch(
         Architecture::X64 => arch::x86::ArchMode::Mode64,
     };
 
-    let cs = Capstone::new()
+    let cs = match Capstone::new()
         .x86()
         .mode(capstone_architecture)
         .syntax(arch::x86::ArchSyntax::Intel)
         .detail(true)
         .build()
-        .context("Failed to create Capstone instance.")?;
+    {
+        Ok(cs) => cs,
+        Err(_) => bail!("Failed to create Capstone instance."),
+    };
 
     for range in find_candidate_ranges(code).flat_map(|range| gen_disassemble_ranges(code, range)) {
         let code_block = &code[range.clone()];
