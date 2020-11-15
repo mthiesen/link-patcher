@@ -100,6 +100,10 @@ The table below lists the found patches. I am using integration tests to verify 
 | Visual Studio® 2017  | 14.16.27043.0 | x64  | FF084808 | 194455 | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio® 2017  | 14.16.27043.0 | x86  | 0293291C | 188497 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
 | Visual Studio® 2017  | 14.16.27043.0 | x86  | 26CFB00A | 188497 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
+| Visual Studio® 2017  | 14.16.27044.0 | x64  | 274F7BAA | 194455 | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio® 2017  | 14.16.27044.0 | x64  | 3F83C278 | 194455 | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio® 2017  | 14.16.27044.0 | x86  | 59CA7A71 | 188481 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
+| Visual Studio® 2017  | 14.16.27044.0 | x86  | D5F6DC59 | 188481 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
 | Visual Studio® 2019  | 14.20.27508.1 | x64  | 315FE938 | 134063 | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio® 2019  | 14.20.27508.1 | x64  | 74DAEA46 | 134063 | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio® 2019  | 14.20.27508.1 | x86  | 379929A6 | 292218 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
@@ -164,3 +168,7 @@ The table below lists the found patches. I am using integration tests to verify 
 | Visual Studio® 2019  | 14.27.29112.0 | x64  | D0172C6C | 38734  | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio® 2019  | 14.27.29112.0 | x86  | 497C27A5 | 356436 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
 | Visual Studio® 2019  | 14.27.29112.0 | x86  | FB40F3A5 | 356436 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
+| Visual Studio® 2019  | 14.28.29333.0 | x64  | E3565E4D | 88466  | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio® 2019  | 14.28.29333.0 | x64  | E6A383DD | 88466  | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio® 2019  | 14.28.29333.0 | x86  | 29EE647E | 260723 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
+| Visual Studio® 2019  | 14.28.29333.0 | x86  | D6932A6F | 260723 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
