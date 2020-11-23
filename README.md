@@ -172,3 +172,7 @@ The table below lists the found patches. I am using integration tests to verify 
 | Visual Studio® 2019  | 14.28.29333.0 | x64  | E6A383DD | 88466  | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio® 2019  | 14.28.29333.0 | x86  | 29EE647E | 260723 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
 | Visual Studio® 2019  | 14.28.29333.0 | x86  | D6932A6F | 260723 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
+| Visual Studio® 2019  | 14.28.29334.0 | x64  | 93B6399B | 88466  | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio® 2019  | 14.28.29334.0 | x64  | A1D25FED | 88466  | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio® 2019  | 14.28.29334.0 | x86  | 4560993E | 260723 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
+| Visual Studio® 2019  | 14.28.29334.0 | x86  | 7DCFEE96 | 260723 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
