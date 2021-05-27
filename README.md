@@ -65,6 +65,7 @@ The table below lists the found patches. I am using integration tests to verify 
 | Visual Studio® 2017  | 14.15.26727.0 | x86  | 6CCE014E | 360041 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
 | Visual Studio® 2017  | 14.15.26727.0 | x86  | 8FAB3853 | 360041 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
 | Visual Studio® 2017  | 14.15.26727.0 | x86  | BD22AE77 | 360041 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
+| Visual Studio® 2017  | 14.15.26727.0 | x86  | DD41030E | 360041 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
 | Visual Studio® 2017  | 14.16.27023.1 | x64  | 4A2BBDF9 | 43507  | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio® 2017  | 14.16.27023.1 | x64  | D0C167D8 | 43507  | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio® 2017  | 14.16.27023.1 | x86  | CDCFB8B4 | 194755 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
@@ -213,3 +214,7 @@ The table below lists the found patches. I am using integration tests to verify 
 | Visual Studio® 2019  | 14.28.29915.0 | x64  | EE9B4219 | 18662  | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio® 2019  | 14.28.29915.0 | x86  | 0B51478A | 322171 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
 | Visual Studio® 2019  | 14.28.29915.0 | x86  | 1AB4A05D | 322171 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
+| Visual Studio® 2019  | 14.29.30037.0 | x64  | 56BA3E8B | 26370  | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio® 2019  | 14.29.30037.0 | x64  | 9928DC2C | 26370  | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio® 2019  | 14.29.30037.0 | x86  | 3C71F56D | 258994 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
+| Visual Studio® 2019  | 14.29.30037.0 | x86  | 56FDF20E | 258994 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
