@@ -7,40 +7,46 @@ use std::path::PathBuf;
 use walkdir::WalkDir;
 use winapi::shared::minwindef::DWORD;
 
-fn get_program_files_x86_path() -> Fallible<PathBuf> {
+fn get_program_files_paths() -> Fallible<Vec<PathBuf>> {
     use winapi::shared::minwindef::MAX_PATH;
     use winapi::shared::winerror;
     use winapi::um::shlobj::SHGetFolderPathW;
+    use winapi::um::shlobj::CSIDL_PROGRAM_FILES;
     use winapi::um::shlobj::CSIDL_PROGRAM_FILESX86;
     use winapi::um::winnt::LPWSTR;
 
     let mut buffer = [0u16; MAX_PATH];
 
-    unsafe {
-        let result = SHGetFolderPathW(
-            std::ptr::null_mut(),
-            CSIDL_PROGRAM_FILESX86,
-            std::ptr::null_mut(),
-            0 as DWORD,
-            &mut buffer[0] as LPWSTR,
-        );
+    let mut paths = Vec::new();
+    for csidl in [CSIDL_PROGRAM_FILESX86, CSIDL_PROGRAM_FILES] {
+        unsafe {
+            let result = SHGetFolderPathW(
+                std::ptr::null_mut(),
+                csidl,
+                std::ptr::null_mut(),
+                0 as DWORD,
+                &mut buffer[0] as LPWSTR,
+            );
 
-        if winerror::IS_ERROR(result) {
-            let error_code = winerror::HRESULT_CODE(result) as DWORD;
-            bail!(linker_utils::get_windows_error_message(
-                "SHGetFolderPathW",
-                error_code
-            ));
+            if winerror::IS_ERROR(result) {
+                let error_code = winerror::HRESULT_CODE(result) as DWORD;
+                bail!(linker_utils::get_windows_error_message(
+                    "SHGetFolderPathW",
+                    error_code
+                ));
+            }
+        };
+
+        if let Some(len) = buffer.iter().position(|c| *c == 0) {
+            let path = String::from_utf16(&buffer[..len])
+                .context("SHGetFolderPathW returned malformed UTF-16")?;
+            paths.push(PathBuf::from(path));
+        } else {
+            bail!("SHGetFolderPathW did not return a null terminated string");
         }
-    };
-
-    if let Some(len) = buffer.iter().position(|c| *c == 0) {
-        let path = String::from_utf16(&buffer[..len])
-            .context("SHGetFolderPathW returned malformed UTF-16")?;
-        Ok(PathBuf::from(path))
-    } else {
-        bail!("SHGetFolderPathW did not return a null terminated string");
     }
+
+    Ok(paths)
 }
 
 fn path_to_file_name(path: &Path) -> &str {
@@ -346,33 +352,36 @@ fn run() -> Fallible<()> {
 
     println!("Target directory is \"{}\"", target_base_dir.display());
 
-    let program_files_x86_path = get_program_files_x86_path()?;
-    println!(
-        "Scanning \"{}\" for Microsoft Linkers ...",
-        program_files_x86_path.display()
-    );
-    println!();
+    for path_files_path in get_program_files_paths()? {
+        println!(
+            "Scanning \"{}\" for Microsoft Linkers ...",
+            path_files_path.display()
+        );
+        println!();
 
-    for entry in WalkDir::new(program_files_x86_path)
-        .into_iter()
-        .filter_map(|e| e.ok())
-    {
-        let path = entry.into_path();
-        if path.is_file() {
-            let file_name = path_to_file_name(&path);
-            if file_name.eq_ignore_ascii_case("link.exe") {
-                match LinkProgramInfo::new(&path) {
-                    Ok(link_program_info) => archive_link_binaries(
-                        &target_base_dir,
-                        &link_program_info,
-                    )
-                    .with_context(|_| {
-                        format!("failed to archive link binaries for \"{}\"", path.display())
-                    })?,
-                    Err(err) => {
-                        println!("SKIPPING: {}", path.display());
-                        print_error(&err)?;
-                        println!();
+        for entry in WalkDir::new(path_files_path)
+            .into_iter()
+            .filter_map(|e| e.ok())
+        {
+            let path = entry.into_path();
+            if path.is_file() {
+                let file_name = path_to_file_name(&path);
+                if file_name.eq_ignore_ascii_case("link.exe") {
+                    match LinkProgramInfo::new(&path) {
+                        Ok(link_program_info) => {
+                            archive_link_binaries(&target_base_dir, &link_program_info)
+                                .with_context(|_| {
+                                    format!(
+                                        "failed to archive link binaries for \"{}\"",
+                                        path.display()
+                                    )
+                                })?
+                        }
+                        Err(err) => {
+                            println!("SKIPPING: {}", path.display());
+                            print_error(&err)?;
+                            println!();
+                        }
                     }
                 }
             }
