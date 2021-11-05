@@ -242,3 +242,7 @@ The table below lists the found patches. I am using integration tests to verify 
 | Visual Studio®       | 14.30.30704.0 | x64  | 9BC0C94E | 142406 | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio®       | 14.30.30704.0 | x86  | A5E71775 | 341679 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
 | Visual Studio®       | 14.30.30704.0 | x86  | A975338B | 341679 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
+| Visual Studio®       | 14.30.30705.0 | x64  | 29BECBF7 | 142406 | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio®       | 14.30.30705.0 | x64  | 53976C7B | 142406 | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio®       | 14.30.30705.0 | x86  | 6A3B4C8D | 341679 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
+| Visual Studio®       | 14.30.30705.0 | x86  | E865FFE4 | 341679 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
