@@ -66,6 +66,7 @@ The table below lists the found patches. I am using integration tests to verify 
 | Visual Studio® 2017  | 14.15.26727.0 | x86  | 8FAB3853 | 360041 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
 | Visual Studio® 2017  | 14.15.26727.0 | x86  | BD22AE77 | 360041 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
 | Visual Studio® 2017  | 14.15.26727.0 | x86  | DD41030E | 360041 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
+| Visual Studio® 2017  | 14.15.26727.0 | x86  | F65D301F | 360041 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
 | Visual Studio® 2017  | 14.16.27023.1 | x64  | 4A2BBDF9 | 43507  | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio® 2017  | 14.16.27023.1 | x64  | D0C167D8 | 43507  | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio® 2017  | 14.16.27023.1 | x86  | CDCFB8B4 | 194755 | 8B, 44, 24, 10 | 33, C0, 90, 90 |
@@ -234,6 +235,10 @@ The table below lists the found patches. I am using integration tests to verify 
 | Visual Studio® 2019  | 14.29.30136.0 | x64  | E5B10787 | 181154 | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio® 2019  | 14.29.30136.0 | x86  | 228C0DED | 221523 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
 | Visual Studio® 2019  | 14.29.30136.0 | x86  | BA54BFE7 | 221523 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
+| Visual Studio® 2019  | 14.29.30137.0 | x64  | 25E45EE1 | 181154 | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio® 2019  | 14.29.30137.0 | x64  | A5E46FE7 | 181154 | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio® 2019  | 14.29.30137.0 | x86  | 11F7A0A4 | 221571 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
+| Visual Studio® 2019  | 14.29.30137.0 | x86  | 62D9BC72 | 221571 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
 | Visual Studio®       | 14.30.30423.0 | x64  | 6ECE43DA | 188950 | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio®       | 14.30.30423.0 | x64  | 90D14E11 | 188950 | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio®       | 14.30.30423.0 | x86  | 574394B5 | 223771 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
@@ -246,3 +251,11 @@ The table below lists the found patches. I am using integration tests to verify 
 | Visual Studio®       | 14.30.30705.0 | x64  | 53976C7B | 142406 | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio®       | 14.30.30705.0 | x86  | 6A3B4C8D | 341679 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
 | Visual Studio®       | 14.30.30705.0 | x86  | E865FFE4 | 341679 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
+| Visual Studio®       | 14.30.30706.0 | x64  | 517D6656 | 64466  | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio®       | 14.30.30706.0 | x64  | 81BB64EA | 64466  | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio®       | 14.30.30706.0 | x86  | 765CC04B | 306976 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
+| Visual Studio®       | 14.30.30706.0 | x86  | EC96C572 | 306976 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
+| Visual Studio®       | 14.31.30818.0 | x64  | 245D6820 | 88695  | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio®       | 14.31.30818.0 | x64  | 28DE60E4 | 88695  | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio®       | 14.31.30818.0 | x86  | 0F491439 | 320706 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
+| Visual Studio®       | 14.31.30818.0 | x86  | CC4D5F3B | 320706 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
