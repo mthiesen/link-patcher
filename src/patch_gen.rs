@@ -338,7 +338,7 @@ pub(crate) fn find_patch(
             let mut filtered_instructions = instructions
                 .iter()
                 .filter_map(|instruction| {
-                    let instruction_type = classify_instruction(&instruction);
+                    let instruction_type = classify_instruction(instruction);
                     if instruction_type != InstructionType::Other {
                         Some((instruction, instruction_type))
                     } else {

@@ -94,11 +94,8 @@ fn installed_kernel32_libs() -> Option<Kernel32Libs> {
         }
     }
 
-    if x86_lib.is_some() && x64_lib.is_some() {
-        Some(Kernel32Libs {
-            x86_lib: x86_lib.unwrap(),
-            x64_lib: x64_lib.unwrap(),
-        })
+    if let (Some(x86_lib), Some(x64_lib)) = (x86_lib, x64_lib) {
+        Some(Kernel32Libs { x86_lib, x64_lib })
     } else {
         None
     }
@@ -108,7 +105,7 @@ fn installed_kernel32_libs() -> Option<Kernel32Libs> {
 
 #[derive(Debug)]
 struct TestFiles {
-    tempdir: TempDir,
+    _tempdir: TempDir,
     x86_exe: PathBuf,
     x64_exe: PathBuf,
 }
@@ -167,7 +164,7 @@ fn link_test_files(linker_path: impl AsRef<OsStr>) -> TestFiles {
     );
 
     TestFiles {
-        tempdir,
+        _tempdir: tempdir,
         x86_exe,
         x64_exe,
     }
@@ -177,11 +174,7 @@ fn link_test_files(linker_path: impl AsRef<OsStr>) -> TestFiles {
 
 fn has_rich_header(exe_path: impl AsRef<Path>) -> bool {
     let file = File::open(exe_path).unwrap();
-    if let Ok(Some(_)) = exe_tools::read_rich_header(file) {
-        true
-    } else {
-        false
-    }
+    matches!(exe_tools::read_rich_header(file), Ok(Some(_)))
 }
 
 // -------------------------------------------------------------------------------------------------

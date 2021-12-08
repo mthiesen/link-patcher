@@ -37,7 +37,7 @@ fn main() {
         })
         .map(|path| {
             let test_name_suffix: String = {
-                let exe_directory = path.iter().rev().skip(1).next().unwrap();
+                let exe_directory = path.iter().rev().nth(1).unwrap();
                 exe_directory
                     .to_string_lossy()
                     .chars()
