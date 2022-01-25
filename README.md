@@ -239,6 +239,10 @@ The table below lists the found patches. I am using integration tests to verify 
 | Visual Studio® 2019  | 14.29.30137.0 | x64  | A5E46FE7 | 181154 | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio® 2019  | 14.29.30137.0 | x86  | 11F7A0A4 | 221571 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
 | Visual Studio® 2019  | 14.29.30137.0 | x86  | 62D9BC72 | 221571 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
+| Visual Studio® 2019  | 14.29.30139.0 | x64  | 358BCBB5 | 181154 | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio® 2019  | 14.29.30139.0 | x64  | B731B805 | 181154 | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio® 2019  | 14.29.30139.0 | x86  | 7D59BCAF | 221571 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
+| Visual Studio® 2019  | 14.29.30139.0 | x86  | B37B0D80 | 221571 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
 | Visual Studio®       | 14.30.30423.0 | x64  | 6ECE43DA | 188950 | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio®       | 14.30.30423.0 | x64  | 90D14E11 | 188950 | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio®       | 14.30.30423.0 | x86  | 574394B5 | 223771 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
@@ -255,6 +259,10 @@ The table below lists the found patches. I am using integration tests to verify 
 | Visual Studio®       | 14.30.30706.0 | x64  | 81BB64EA | 64466  | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio®       | 14.30.30706.0 | x86  | 765CC04B | 306976 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
 | Visual Studio®       | 14.30.30706.0 | x86  | EC96C572 | 306976 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
+| Visual Studio®       | 14.30.30709.0 | x64  | 1797A99D | 104666 | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio®       | 14.30.30709.0 | x64  | 84A5A967 | 104666 | 41, 8B, C7     | 33, C0, 90     |
+| Visual Studio®       | 14.30.30709.0 | x86  | 5F6908BA | 227099 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
+| Visual Studio®       | 14.30.30709.0 | x86  | 6F51E4DC | 227099 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
 | Visual Studio®       | 14.31.30818.0 | x64  | 245D6820 | 88695  | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio®       | 14.31.30818.0 | x64  | 28DE60E4 | 88695  | 41, 8B, C7     | 33, C0, 90     |
 | Visual Studio®       | 14.31.30818.0 | x86  | 0F491439 | 320706 | 8B, 44, 24, 14 | 33, C0, 90, 90 |
