@@ -2,8 +2,8 @@ use super::Patch;
 use crate::exe_tools::Architecture;
 use byteorder::{ByteOrder, LittleEndian};
 use capstone::{prelude::*, Insn};
-use common_failures::prelude::*;
-use failure::{bail, err_msg};
+use eyre::bail;
+use eyre::Result;
 use itertools::Itertools;
 use lazy_static::lazy_static;
 use std::ops::Range;
@@ -415,7 +415,7 @@ pub(crate) fn find_patch(
         }
     }
 
-    Err(err_msg("Unable to find code to patch."))
+    bail!("Unable to find code to patch.");
 }
 
 // -------------------------------------------------------------------------------------------------

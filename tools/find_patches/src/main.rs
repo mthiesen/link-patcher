@@ -1,6 +1,5 @@
-use common_failures::quick_main;
-use failure::Fallible;
-use failure::ResultExt;
+use eyre::Result;
+use eyre::WrapErr;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufWriter;
@@ -56,18 +55,18 @@ impl PatchInfo {
     }
 }
 
-fn generate_patch_info(path: impl AsRef<Path>) -> Fallible<PatchInfo> {
-    let version_info =
-        linker_utils::get_version_info(path.as_ref()).context("failed to retrieve version info")?;
+fn generate_patch_info(path: impl AsRef<Path>) -> Result<PatchInfo> {
+    let version_info = linker_utils::get_version_info(path.as_ref())
+        .wrap_err("failed to retrieve version info")?;
     let architecture = linker_utils::get_architecture(path.as_ref())
-        .context("failed to determine linker architecture")?;
+        .wrap_err("failed to determine linker architecture")?;
     let crc32 = linker_utils::calculate_crc32(path.as_ref())
-        .context("failed to to calculate CRC32 of linker executable")?;
+        .wrap_err("failed to to calculate CRC32 of linker executable")?;
 
     let patch = link_patcher::find_patch(
-        File::open(path.as_ref()).context("failed to open linker executable for reading")?,
+        File::open(path.as_ref()).wrap_err("failed to open linker executable for reading")?,
     )
-    .context("failed to find patch for linker")?;
+    .wrap_err("failed to find patch for linker")?;
 
     Ok(PatchInfo {
         product_name: version_info.product_name.unwrap_or_default(),
@@ -78,7 +77,7 @@ fn generate_patch_info(path: impl AsRef<Path>) -> Fallible<PatchInfo> {
     })
 }
 
-fn write_patch_table(writer: &mut dyn Write, patch_infos: &[PatchInfo]) -> Fallible<()> {
+fn write_patch_table(writer: &mut dyn Write, patch_infos: &[PatchInfo]) -> Result<()> {
     const CAPTIONS: [&str; 7] = [
         "Product Name",
         "Version",
@@ -164,9 +163,9 @@ fn write_patch_table(writer: &mut dyn Write, patch_infos: &[PatchInfo]) -> Falli
     Ok(())
 }
 
-fn run() -> Fallible<()> {
+fn main() -> Result<()> {
     let base_dir = linker_utils::get_link_executable_base_dir()
-        .context("failed to get link executable base dir")?;
+        .wrap_err("failed to get link executable base dir")?;
 
     let mut patch_infos = Vec::new();
     for entry in walkdir::WalkDir::new(base_dir)
@@ -182,7 +181,7 @@ fn run() -> Fallible<()> {
                 .unwrap_or_default();
             if file_name.eq_ignore_ascii_case("link.exe") {
                 println!("Generating patch info for \"{}\" ...", path.display());
-                patch_infos.push(generate_patch_info(&path).with_context(|_| {
+                patch_infos.push(generate_patch_info(&path).wrap_err_with(|| {
                     format!("failed to generate patch info for \"{}\"", path.display())
                 })?);
             }
@@ -193,7 +192,7 @@ fn run() -> Fallible<()> {
         .iter()
         .collect::<PathBuf>()
         .canonicalize()
-        .context("failed to canonicalize path")?;
+        .wrap_err("failed to canonicalize path")?;
 
     println!(
         "Replacing patch table in \"{}\" ...",
@@ -208,10 +207,10 @@ fn run() -> Fallible<()> {
                 Err(err) => Err(err),
             }
         })
-        .context("failed to read README.md")?;
+        .wrap_err("failed to read README.md")?;
 
     let mut readme_file = BufWriter::new(
-        File::create(&readme_md_file_name).context("failed to open README.md for writing")?,
+        File::create(&readme_md_file_name).wrap_err("failed to open README.md for writing")?,
     );
 
     // Copy content from README.md until the start of the patch table.
@@ -220,13 +219,11 @@ fn run() -> Fallible<()> {
         if line.starts_with("| Product Name") {
             break;
         }
-        writeln!(&mut readme_file, "{}", line).context("failed to write to README.md")?;
+        writeln!(&mut readme_file, "{}", line).wrap_err("failed to write to README.md")?;
     }
 
     // Write the new patch table to the end of README.md.
-    write_patch_table(&mut readme_file, &patch_infos).context("failed to write patch table")?;
+    write_patch_table(&mut readme_file, &patch_infos).wrap_err("failed to write patch table")?;
 
     Ok(())
 }
-
-quick_main!(run);

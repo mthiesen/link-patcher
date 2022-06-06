@@ -3,8 +3,9 @@ pub mod patch_gen;
 
 // -------------------------------------------------------------------------------------------------
 
-use common_failures::prelude::*;
-use failure::bail;
+use eyre::bail;
+use eyre::Result;
+use eyre::WrapErr;
 use itertools::Itertools;
 use std::{
     ffi::OsString,
@@ -48,7 +49,7 @@ fn create_backup_file(file_name: impl AsRef<Path>) -> Result<PathBuf> {
         backup_file_name
     };
 
-    copy_file(&file_name, &backup_file_name).with_context(|_| {
+    copy_file(&file_name, &backup_file_name).wrap_err_with(|| {
         format!(
             "Failed to create backup copy \"{}\" of file \"{}\".",
             backup_file_name.display(),
@@ -222,24 +223,24 @@ mod test_patch {
 
 pub fn find_patch(mut reader: impl Read + Seek) -> Result<Patch> {
     let arch = exe_tools::determine_architecture(&mut reader)
-        .context("Failed to determine exe architecture.")?;
+        .wrap_err("Failed to determine exe architecture.")?;
 
     let code_section =
-        exe_tools::find_code_section(&mut reader).context("Failed to find exe code section.")?;
+        exe_tools::find_code_section(&mut reader).wrap_err("Failed to find exe code section.")?;
 
     let code = {
         let mut buffer = vec![0u8; code_section.len];
         reader
             .seek(SeekFrom::Start(code_section.offset))
-            .context("Failed to read exe code section.")?;
+            .wrap_err("Failed to read exe code section.")?;
         reader
             .read_exact(&mut buffer[..])
-            .context("Failed to read exe code section.")?;
+            .wrap_err("Failed to read exe code section.")?;
         buffer
     };
 
-    Ok(patch_gen::find_patch(arch, code_section.offset, &code[..])
-        .context("Failed to generate patch.")?)
+    patch_gen::find_patch(arch, code_section.offset, &code[..])
+        .wrap_err("Failed to generate patch.")
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -251,7 +252,7 @@ pub fn run(
 ) -> Result<Option<PathBuf>> {
     let patch = {
         let file = File::open(&input_file)
-            .with_context(|_| format!("Failed to open \"{}\".", input_file.as_ref().display()))?;
+            .wrap_err_with(|| format!("Failed to open \"{}\".", input_file.as_ref().display()))?;
         find_patch(file)?
     };
 
@@ -281,14 +282,14 @@ pub fn run(
             .read(true)
             .write(true)
             .open(&input_file)
-            .with_context(|_| {
+            .wrap_err_with(|| {
                 format!(
                     "Failed to open \"{}\" for writing.",
                     input_file.as_ref().display()
                 )
             })?;
 
-        patch.apply(&mut file).with_context(|_| {
+        patch.apply(&mut file).wrap_err_with(|| {
             format!(
                 "Failed to apply patch to \"{}\".",
                 input_file.as_ref().display()

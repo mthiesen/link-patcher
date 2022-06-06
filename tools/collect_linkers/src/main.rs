@@ -1,13 +1,12 @@
-use common_failures::quick_main;
-use failure::bail;
-use failure::Fallible;
-use failure::ResultExt;
+use eyre::Result;
+use eyre::bail;
+use eyre:: WrapErr;
 use std::path::Path;
 use std::path::PathBuf;
 use walkdir::WalkDir;
 use winapi::shared::minwindef::DWORD;
 
-fn get_program_files_paths() -> Fallible<Vec<PathBuf>> {
+fn get_program_files_paths() -> Result<Vec<PathBuf>> {
     use winapi::shared::minwindef::MAX_PATH;
     use winapi::shared::winerror;
     use winapi::um::shlobj::SHGetFolderPathW;
@@ -104,9 +103,9 @@ fn determine_path_type(path: &Path) -> PathType {
     PathType::Unknown
 }
 
-fn find_dlls(path_type: &PathType, path: impl AsRef<Path>) -> Fallible<Vec<PathBuf>> {
-    let find_dlls_in_dir = |dir: &Path| -> Fallible<Vec<PathBuf>> {
-        let inner = |dir: &Path| -> Fallible<Vec<PathBuf>> {
+fn find_dlls(path_type: &PathType, path: impl AsRef<Path>) -> Result<Vec<PathBuf>> {
+    let find_dlls_in_dir = |dir: &Path| -> Result<Vec<PathBuf>> {
+        let inner = |dir: &Path| -> Result<Vec<PathBuf>> {
             let mut found_dlls = Vec::new();
 
             let dir = std::fs::read_dir(dir).context("failed to read directory")?;
@@ -136,7 +135,7 @@ fn find_dlls(path_type: &PathType, path: impl AsRef<Path>) -> Fallible<Vec<PathB
             Ok(found_dlls)
         };
 
-        Ok(inner(dir).context(format!("failed to find PDB DLLs in \"{}\"", dir.display()))?)
+        inner(dir).context(format!("failed to find PDB DLLs in \"{}\"", dir.display()))
     };
 
     let parent_dir = path
@@ -144,7 +143,7 @@ fn find_dlls(path_type: &PathType, path: impl AsRef<Path>) -> Fallible<Vec<PathB
         .parent()
         .expect("executable path has to have a parent directory");
 
-    let mut found_dlls = find_dlls_in_dir(&parent_dir)?;
+    let mut found_dlls = find_dlls_in_dir(parent_dir)?;
 
     if found_dlls.is_empty() {
         match path_type {
@@ -161,7 +160,7 @@ fn find_dlls(path_type: &PathType, path: impl AsRef<Path>) -> Fallible<Vec<PathB
             PathType::HostTargetSingle(dir) => {
                 if let Some(parent_parent_dir) = parent_dir.parent() {
                     if dir.len() > 4 && dir[..4].eq_ignore_ascii_case("x86_") {
-                        found_dlls = find_dlls_in_dir(&parent_parent_dir)?;
+                        found_dlls = find_dlls_in_dir(parent_parent_dir)?;
 
                         if found_dlls.is_empty() {
                             let mut search_dir = parent_dir.to_owned();
@@ -202,7 +201,7 @@ struct LinkProgramInfo {
 }
 
 impl LinkProgramInfo {
-    fn new(path: impl AsRef<Path>) -> Fallible<LinkProgramInfo> {
+    fn new(path: impl AsRef<Path>) -> Result<LinkProgramInfo> {
         let version_info = linker_utils::get_version_info(path.as_ref())
             .context("failed to retrieve version info")?;
 
@@ -259,21 +258,7 @@ impl LinkProgramInfo {
     }
 }
 
-fn print_error(error: &failure::Error) -> Fallible<()> {
-    use std::io::Write;
-
-    let stdout = std::io::stdout();
-    let mut handle = stdout.lock();
-
-    writeln!(handle, "error: {}", error).context("failed to write to stdout")?;
-    for cause in error.iter_causes() {
-        writeln!(handle, "caused by: {}", cause).context("failed to write to stdout")?;
-    }
-
-    Ok(())
-}
-
-fn make_writeable(path: impl AsRef<Path>) -> Fallible<()> {
+fn make_writeable(path: impl AsRef<Path>) -> Result<()> {
     let mut permissions = path.as_ref().metadata()?.permissions();
     permissions.set_readonly(false);
     std::fs::set_permissions(path.as_ref(), permissions)?;
@@ -284,7 +269,7 @@ fn make_writeable(path: impl AsRef<Path>) -> Fallible<()> {
 fn archive_link_binaries(
     target_base_dir: impl AsRef<Path>,
     link_program_info: &LinkProgramInfo,
-) -> Fallible<()> {
+) -> Result<()> {
     let target_directory: PathBuf = [
         target_base_dir.as_ref(),
         &link_program_info.target_directory_name(),
@@ -310,7 +295,7 @@ fn archive_link_binaries(
     );
     println!();
 
-    std::fs::create_dir_all(&target_directory).with_context(|_| {
+    std::fs::create_dir_all(&target_directory).wrap_err_with(|| {
         format!(
             "failed to create target directory \"{}\"",
             target_directory.display()
@@ -327,7 +312,7 @@ fn archive_link_binaries(
                 .expect("src path has to end with a file name"),
         );
 
-        std::fs::copy(&src_file, &dst_file).with_context(|_| {
+        std::fs::copy(&src_file, &dst_file).wrap_err_with(|| {
             format!(
                 "failed to copy \"{}\" to \"{}\"",
                 src_file.display(),
@@ -346,7 +331,7 @@ fn archive_link_binaries(
     Ok(())
 }
 
-fn run() -> Fallible<()> {
+fn main() -> Result<()> {
     let target_base_dir = linker_utils::get_link_executable_base_dir()
         .context("failed to get link executable base dir")?;
 
@@ -370,7 +355,7 @@ fn run() -> Fallible<()> {
                     match LinkProgramInfo::new(&path) {
                         Ok(link_program_info) => {
                             archive_link_binaries(&target_base_dir, &link_program_info)
-                                .with_context(|_| {
+                                .wrap_err_with(|| {
                                     format!(
                                         "failed to archive link binaries for \"{}\"",
                                         path.display()
@@ -379,7 +364,7 @@ fn run() -> Fallible<()> {
                         }
                         Err(err) => {
                             println!("SKIPPING: {}", path.display());
-                            print_error(&err)?;
+                            println!("{:#}", err);
                             println!();
                         }
                     }
@@ -390,5 +375,3 @@ fn run() -> Fallible<()> {
 
     Ok(())
 }
-
-quick_main!(run);

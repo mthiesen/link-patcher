@@ -1,6 +1,7 @@
 use byteorder::{BigEndian, ByteOrder, LittleEndian, ReadBytesExt};
-use common_failures::prelude::*;
-use failure::bail;
+use eyre::bail;
+use eyre::Result;
+use eyre::WrapErr;
 use std::io::{Read, Seek, SeekFrom};
 
 // -------------------------------------------------------------------------------------------------
@@ -23,21 +24,25 @@ fn seek_to_pe_header<R: Read + Seek>(mut reader: R) -> Result<()> {
     const GENERIC_ERR_MSG: &str = "Failed to read exe header.";
     const NOT_EXE_ERR_MSG: &str = "File is not an executable.";
 
-    reader.seek(SeekFrom::Start(0)).context(GENERIC_ERR_MSG)?;
-    let mz_signature = reader.read_u16::<BigEndian>().context(GENERIC_ERR_MSG)?;
+    reader.seek(SeekFrom::Start(0)).wrap_err(GENERIC_ERR_MSG)?;
+    let mz_signature = reader.read_u16::<BigEndian>().wrap_err(GENERIC_ERR_MSG)?;
     if mz_signature != MZ_HEADER_SIGNATURE {
         bail!(NOT_EXE_ERR_MSG);
     }
 
     reader
         .seek(SeekFrom::Start(MZ_NEW_HEADER_OFFSET))
-        .context(GENERIC_ERR_MSG)?;
-    let pe_header_offset = u64::from(reader.read_u32::<LittleEndian>().context(GENERIC_ERR_MSG)?);
+        .wrap_err(GENERIC_ERR_MSG)?;
+    let pe_header_offset = u64::from(
+        reader
+            .read_u32::<LittleEndian>()
+            .wrap_err(GENERIC_ERR_MSG)?,
+    );
 
     reader
         .seek(SeekFrom::Start(pe_header_offset))
-        .context(GENERIC_ERR_MSG)?;
-    let pe_signature = reader.read_u32::<BigEndian>().context(GENERIC_ERR_MSG)?;
+        .wrap_err(GENERIC_ERR_MSG)?;
+    let pe_signature = reader.read_u32::<BigEndian>().wrap_err(GENERIC_ERR_MSG)?;
     if pe_signature != PE_HEADER_SIGNATURE {
         bail!(NOT_EXE_ERR_MSG);
     }
@@ -45,7 +50,7 @@ fn seek_to_pe_header<R: Read + Seek>(mut reader: R) -> Result<()> {
     // Seek back so that the file position is at the beginning of the PE header.
     reader
         .seek(SeekFrom::Current(-4))
-        .context(GENERIC_ERR_MSG)?;
+        .wrap_err(GENERIC_ERR_MSG)?;
 
     Ok(())
 }
@@ -180,9 +185,13 @@ pub(crate) fn determine_architecture<R: Read + Seek>(mut reader: R) -> Result<Ar
     const GENERIC_ERR_MSG: &str = "Unable to read exe header.";
 
     seek_to_pe_header(&mut reader)?;
-    reader.seek(SeekFrom::Current(4)).context(GENERIC_ERR_MSG)?;
+    reader
+        .seek(SeekFrom::Current(4))
+        .wrap_err(GENERIC_ERR_MSG)?;
 
-    let machine_signature = reader.read_u16::<LittleEndian>().context(GENERIC_ERR_MSG)?;
+    let machine_signature = reader
+        .read_u16::<LittleEndian>()
+        .wrap_err(GENERIC_ERR_MSG)?;
 
     Ok(match machine_signature {
         PE_MACHINE_SIGNATURE_X86 => Architecture::X86,
@@ -305,18 +314,20 @@ pub struct RichHeader(Vec<RichHeaderEntry>);
 pub fn read_rich_header<R: Read + Seek>(mut reader: R) -> Result<Option<RichHeader>> {
     const GENERIC_ERR_MSG: &str = "Failed to read exe data.";
 
-    seek_to_pe_header(&mut reader).context("Failed to find PE header.")?;
+    seek_to_pe_header(&mut reader).wrap_err("Failed to find PE header.")?;
 
     // We search from the end of the MZ header to the beginning of the PE header.
     let search_start_pos = MZ_NEW_HEADER_OFFSET + 4;
-    let search_end_pos = reader.seek(SeekFrom::Current(0)).context(GENERIC_ERR_MSG)?;
+    let search_end_pos = reader
+        .seek(SeekFrom::Current(0))
+        .wrap_err(GENERIC_ERR_MSG)?;
     assert!(search_end_pos >= search_start_pos);
 
     reader
         .seek(SeekFrom::Start(search_start_pos))
-        .context(GENERIC_ERR_MSG)?;
+        .wrap_err(GENERIC_ERR_MSG)?;
     let mut buffer = vec![0u8; (search_end_pos - search_start_pos) as usize];
-    reader.read_exact(&mut buffer).context(GENERIC_ERR_MSG)?;
+    reader.read_exact(&mut buffer).wrap_err(GENERIC_ERR_MSG)?;
 
     // Find key and end of header.
     let (key, header) = match buffer
@@ -512,26 +523,32 @@ pub(crate) struct CodeSection {
 pub(crate) fn find_code_section<R: Read + Seek>(mut reader: R) -> Result<CodeSection> {
     const GENERIC_ERR_MSG: &str = "Unable to read exe header.";
 
-    seek_to_pe_header(&mut reader).context("Failed to find PE header.")?;
+    seek_to_pe_header(&mut reader).wrap_err("Failed to find PE header.")?;
 
-    reader.seek(SeekFrom::Current(6)).context(GENERIC_ERR_MSG)?;
-    let section_count = reader.read_u16::<LittleEndian>().context(GENERIC_ERR_MSG)?;
+    reader
+        .seek(SeekFrom::Current(6))
+        .wrap_err(GENERIC_ERR_MSG)?;
+    let section_count = reader
+        .read_u16::<LittleEndian>()
+        .wrap_err(GENERIC_ERR_MSG)?;
 
     reader
         .seek(SeekFrom::Current(12))
-        .context(GENERIC_ERR_MSG)?;
-    let optional_header_len = reader.read_u16::<LittleEndian>().context(GENERIC_ERR_MSG)?;
+        .wrap_err(GENERIC_ERR_MSG)?;
+    let optional_header_len = reader
+        .read_u16::<LittleEndian>()
+        .wrap_err(GENERIC_ERR_MSG)?;
 
     // Skip the optional header, so that the read position is at the first section structure.
     reader
         .seek(SeekFrom::Current(i64::from(optional_header_len) + 2))
-        .context(GENERIC_ERR_MSG)?;
+        .wrap_err(GENERIC_ERR_MSG)?;
 
     let mut buffer = [0u8; 40];
     for _ in 0..section_count {
         reader
             .read_exact(&mut buffer)
-            .context("Failed to read section structure.")?;
+            .wrap_err("Failed to read section structure.")?;
 
         const IMAGE_SCN_CNT_CODE: u32 = 0x0000_0020;
         const IMAGE_SCN_MEM_EXECUTE: u32 = 0x2000_0000;

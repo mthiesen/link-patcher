@@ -1,16 +1,16 @@
-use failure::bail;
-use failure::Fallible;
-use failure::ResultExt;
+use eyre::bail;
+use eyre::Result;
+use eyre::WrapErr;
 use std::path::Path;
 use std::path::PathBuf;
 use winapi::shared::minwindef::DWORD;
 
-pub fn calculate_crc32(path: impl AsRef<Path>) -> Fallible<u32> {
+pub fn calculate_crc32(path: impl AsRef<Path>) -> Result<u32> {
     use std::fs::File;
     use std::io::Read;
 
     let mut file = File::open(path.as_ref())
-        .with_context(|_| format!("failed to open \"{}\" for reading", path.as_ref().display()))?;
+        .wrap_err_with(|| format!("failed to open \"{}\" for reading", path.as_ref().display()))?;
 
     let mut hasher = crc32fast::Hasher::new();
 
@@ -26,7 +26,7 @@ pub fn calculate_crc32(path: impl AsRef<Path>) -> Fallible<u32> {
             }
             Err(err) => match err.kind() {
                 std::io::ErrorKind::Interrupted => (),
-                _ => Err(err).with_context(|_| {
+                _ => Err(err).wrap_err_with(|| {
                     format!("failed to read from \"{}\"", path.as_ref().display())
                 })?,
             },
@@ -90,7 +90,7 @@ pub enum Architecture {
     X86,
 }
 
-pub fn get_architecture(path: impl AsRef<Path>) -> Fallible<Architecture> {
+pub fn get_architecture(path: impl AsRef<Path>) -> Result<Architecture> {
     use winapi::um::winbase::GetBinaryTypeW;
 
     let wide_path =
@@ -122,7 +122,7 @@ pub struct VersionInfo {
     pub product_name: Option<String>,
 }
 
-pub fn get_version_info(path: impl AsRef<Path>) -> Fallible<VersionInfo> {
+pub fn get_version_info(path: impl AsRef<Path>) -> Result<VersionInfo> {
     use winapi::shared::minwindef::LPVOID;
     use winapi::shared::minwindef::PUINT;
     use winapi::shared::minwindef::UINT;
@@ -214,12 +214,12 @@ pub fn get_version_info(path: impl AsRef<Path>) -> Fallible<VersionInfo> {
     })
 }
 
-pub fn get_link_executable_base_dir() -> Fallible<PathBuf> {
+pub fn get_link_executable_base_dir() -> Result<PathBuf> {
     let mut dir = [&env!("CARGO_MANIFEST_DIR"), &"..", &"..", &"tests"]
         .iter()
         .collect::<PathBuf>()
         .canonicalize()
-        .context("failed to canonicalize path")?;
+        .wrap_err("failed to canonicalize path")?;
 
     dir.push("link_executables");
     Ok(dir)

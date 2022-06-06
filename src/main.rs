@@ -1,4 +1,5 @@
-use common_failures::{prelude::*, quick_main};
+use eyre::Result;
+use eyre::WrapErr;
 use std::path::PathBuf;
 use structopt::StructOpt;
 
@@ -18,9 +19,7 @@ struct Options {
 
 // -------------------------------------------------------------------------------------------------
 
-quick_main!(run);
-
-fn run() -> Result<()> {
+fn main() -> Result<()> {
     let options = Options::from_args();
 
     if !yansi::Paint::enable_windows_ascii() {
@@ -39,7 +38,7 @@ fn run() -> Result<()> {
         let prompt = yansi::Paint::red("Do you want to apply the patch now? (YES/NO): ");
         loop {
             print!("{}", prompt);
-            let reply = rprompt::prompt_reply_stdout("").context("Error reading user input.")?;
+            let reply = rprompt::prompt_reply_stdout("").wrap_err("Error reading user input.")?;
             if reply.eq_ignore_ascii_case("yes") {
                 println!();
                 return Ok(true);
