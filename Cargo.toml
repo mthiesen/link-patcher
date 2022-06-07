@@ -9,7 +9,7 @@ license = "MIT"
 
 [dependencies]
 byteorder = "1.4.3"
-capstone = "0.10.0"
+capstone = "0.11.0"
 eyre = "0.6.8"
 itertools = "0.10.3"
 lazy_static = "1.4.0"
