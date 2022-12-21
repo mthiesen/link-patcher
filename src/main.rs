@@ -38,7 +38,7 @@ fn main() -> Result<()> {
         let prompt = yansi::Paint::red("Do you want to apply the patch now? (YES/NO): ");
         loop {
             print!("{}", prompt);
-            let reply = rprompt::prompt_reply_stdout("").wrap_err("Error reading user input.")?;
+            let reply = rprompt::prompt_reply("").wrap_err("Error reading user input.")?;
             if reply.eq_ignore_ascii_case("yes") {
                 println!();
                 return Ok(true);
