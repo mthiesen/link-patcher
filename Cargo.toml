@@ -13,7 +13,7 @@ capstone = "0.11.0"
 eyre = "0.6.8"
 itertools = "0.10.5"
 lazy_static = "1.4.0"
-rprompt = "1.0.5"
+rprompt = "2.0.2"
 structopt = "0.3.26"
 yansi = "0.5.1"
 
